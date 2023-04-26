@@ -1,4 +1,4 @@
-module ciliumsr/client
+module overlaysr/client
 
 go 1.18
 
