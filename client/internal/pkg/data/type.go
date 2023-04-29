@@ -1,8 +1,6 @@
 package data
 
 import (
-	"bytes"
-	"encoding/binary"
 	"encoding/json"
 	"log"
 )
@@ -16,8 +14,8 @@ type Message interface {
 type procMsg struct{}
 
 type podMsg struct {
-	podId        string `json:"podId"`
-	podIndentity string `json:"podIndentity"`
+	PodId        string `json:"podId"`
+	PodIndentity string `json:"podIndentity"`
 }
 
 type nodeMsg struct{}
@@ -27,22 +25,18 @@ type serviceMsg struct{}
 type netMsg struct{}
 
 type WsMsg struct {
-	id      string  `json:"id" :"id"`
-	process procMsg `json:"process" :"process"`
-	pod     podMsg  `json:"pod" :"pod"`
-	node    nodeMsg `json:"node"`
-	net     netMsg  `json:"net"`
+	Id      string  `json:"id" :"id"`
+	Process procMsg `json:"process" :"process"`
+	Pod     podMsg  `json:"pod" :"pod"`
+	Node    nodeMsg `json:"node"`
+	Net     netMsg  `json:"net"`
 }
 
-func (ws *WsMsg) Byte() ([]byte, error) {
+func (ws WsMsg) Byte() ([]byte, error) {
 	// in: WsMsg. out: byte buffer
-	buf := new(bytes.Buffer)
 	msg, err := json.Marshal(ws)
 	if err != nil {
 		log.Fatalf("ws To Josn Failed")
 	}
-	if err := binary.Write(buf, binary.BigEndian, msg); err != nil {
-		return nil, err
-	}
-	return buf.Bytes(), nil
+	return msg, nil
 }

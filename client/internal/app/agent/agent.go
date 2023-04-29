@@ -34,11 +34,9 @@ type WsAgent struct {
 	Message data.Message
 }
 
-func (agent *WsAgent) Read(update chan data.Message) {
-	for {
-		select {
-		case update <- agent.Message:
-		}
+func (agent *WsAgent) Read(cilium chan data.Message) {
+	for msg := range cilium {
+		agent.Message = msg
 	}
 }
 
