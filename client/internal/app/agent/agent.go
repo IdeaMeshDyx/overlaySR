@@ -2,34 +2,48 @@ package agent
 
 import (
 	"flag"
-	"github.com/gorilla/websocket"
 	"log"
 	"net/url"
 	"os"
 	"os/signal"
 	data "overlaysr/client/internal/pkg/data"
 	"time"
+
+	"github.com/gorilla/websocket"
 )
 
 type agent interface {
 	/**TODO:
 	* Client 获取 Message 之后直接发送
 	 */
-	send() error
+	Send() error
 
 	/**TODO:
 	接收server 的更新信息并放入 update chan
 	*/
-	update(update chan data.Message)
+	Update(update chan data.Message)
+
+	/**TODO:
+	* 接收collector 的更新信息并放入 update chan
+	 */
+	Read(update chan data.Message)
 }
 
 type WsAgent struct {
-	addr    string
-	message data.Message
+	Addr    string
+	Message data.Message
 }
 
-func (agent *WsAgent) addrUp() {
-	agent.addr = *flag.String("addr", "localhost:8080", "http service address")
+func (agent *WsAgent) Read(update chan data.Message) {
+	for {
+		select {
+		case update <- agent.Message:
+		}
+	}
+}
+
+func (agent *WsAgent) AddrUp() {
+	agent.Addr = *flag.String("Addr", "localhost:8080", "http service Address")
 }
 
 func (agent *WsAgent) Send() {
@@ -39,7 +53,7 @@ func (agent *WsAgent) Send() {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
 
-	u := url.URL{Scheme: "ws", Host: agent.addr, Path: "/echo"}
+	u := url.URL{Scheme: "ws", Host: agent.Addr, Path: "/echo"}
 	log.Printf("connecting to %s", u.String())
 
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)

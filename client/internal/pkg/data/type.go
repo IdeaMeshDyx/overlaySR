@@ -11,9 +11,12 @@ type Message interface {
 	Byte() ([]byte, error)
 }
 
-type proMsg struct{}
+type procMsg struct{}
 
-type podMsg struct{}
+type podMsg struct {
+	podid        string
+	podIndentity string
+}
 
 type nodeMsg struct{}
 
@@ -23,15 +26,15 @@ type netMsg struct{}
 
 type WsMsg struct {
 	id      string
-	process proMsg
+	process procMsg
 	pod     podMsg
 	node    nodeMsg
 	net     netMsg
 }
 
 func (ws *WsMsg) Byte() ([]byte, error) {
+	// in: WsMsg. out: byte buffer
 	buf := new(bytes.Buffer)
-
 	if err := binary.Write(buf, binary.BigEndian, ws); err != nil {
 		return nil, err
 	}
