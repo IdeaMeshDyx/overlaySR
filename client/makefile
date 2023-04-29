@@ -3,6 +3,8 @@ default:
 	@echo "Options:"
 	@echo "	runc : run the client main.go script"
 	@echo "	build : build client"
+	@echo "	runt : go run test"
+	@echo "	buildt : build and run test"
 	@echo "	exec : run the client's executable file"
 	@echo "	clean : clean all executable file"
 
@@ -17,3 +19,10 @@ exec:
 
 runc:
 	go run ./cmd/agent/main.go
+
+runt:
+	go run ./test/test.go
+
+buildt:
+	go build -o ./test/test.o ./test/test.go 
+	sudo ./test/test.o

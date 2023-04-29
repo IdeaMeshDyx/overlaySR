@@ -17,15 +17,18 @@
 package ciliumAPI
 
 import (
-	"fmt"
 	"sort"
 	"strings"
+
+	"overlaysr/client/internal/pkg/data"
 
 	"github.com/cilium/cilium/pkg/client"
 )
 
-func main() {
+// in fact , endpoints in cilium are usually pods
+func GetEps() data.PodsMsg {
 	// Connect to the default path /var/run/cilium/cilium.sock
+	msg := data.PodsMsg{}
 	c, err := client.NewDefaultClient()
 	if err != nil {
 		panic(err)
@@ -44,52 +47,43 @@ func main() {
 
 	// Print the IPs of the endpoints
 	for _, ep := range eps {
+
+		var pod data.SinglePod
+		pod.Id = ep.ID
 		var v4s, v6s []string
 		for _, ip := range ep.Status.Networking.Addressing {
 			if ip.IPV4 != "" {
 				v4s = append(v4s, ip.IPV4)
 			}
-			if ip.IPV4 != "" {
+			if ip.IPV6 != "" {
 				v6s = append(v6s, ip.IPV6)
 			}
 		}
-		ips := strings.Join(v4s, ", ")
-		if ips != "" {
-			fmt.Printf("EP ID %d has IP addresses: %s\n", ep.ID, ips)
+		ip4s := strings.Join(v4s, ", ")
+		ip6s := strings.Join(v6s, ", ")
+		if ip4s != "" {
+			pod.IPv4 = ip4s
 		} else {
-			fmt.Printf("EP ID %d does not have an IP address\n", ep.ID)
+			pod.IPv4 = "N/A"
+		}
+		if ip6s != "" {
+			pod.IPv6 = ip6s
+		} else {
+			pod.IPv6 = "N/A"
 		}
 
-		// test below
+		pod.HostMac = ep.Status.Networking.HostMac
+		pod.InterfaceName = ep.Status.Networking.InterfaceName
+		pod.InterfaceIndex = ep.Status.Networking.InterfaceIndex
+		pod.Mac = ep.Status.Networking.Mac
 
-		// No.1 print networking issues
-		fmt.Printf("Addressing: %v\n", ep.Status.Networking.Addressing)
-		fmt.Printf("HostAddressing: %v\n", ep.Status.Networking.HostAddressing)
-		fmt.Printf("HostMac: %s\n", ep.Status.Networking.HostMac)
-		fmt.Printf("InterfaceIndex: %d\n", ep.Status.Networking.InterfaceIndex)
-		fmt.Printf("InterfaceName: %s\n", ep.Status.Networking.InterfaceName)
-		fmt.Printf("Mac: %s\n", ep.Status.Networking.Mac)
+		pod.Indentity = ep.Status.Identity.ID
+		pod.Labels = ep.Status.Identity.Labels
+		pod.LabelsSHA256 = ep.Status.Identity.LabelsSHA256
 
-		for _, ip := range ep.Status.Networking.Addressing {
-			fmt.Printf("ip: %v\n", ip)
-			if ip.IPV4 != "" {
-				fmt.Printf("IPv4: %s\n", ip.IPV4)
-			} else {
-				fmt.Printf("No IPv4\n")
-			}
-			if ip.IPV6 != "" {
-				fmt.Printf("IPv6: %s\n", ip.IPV6)
-			} else {
-				fmt.Printf("No IPv6\n")
-			}
-			// print uuid
-			fmt.Printf("UUID: %s\n", ip.IPV4ExpirationUUID)
-		}
-		fmt.Printf("\n=====================\n")
-
-		// No.2 print identity
-		// fmt.Printf("Identity: %v\n", ep.Status.Identity)
+		msg.Pods = append(msg.Pods, pod)
 
 	}
+	return msg
 
 }

@@ -12,7 +12,7 @@ func main() {
 	buffer := make(chan data.Message, 10)
 	var hub agent.WsAgent
 	coll := collector.Collector{
-		CollID: "coll1",
+		CollID: "collector1",
 		Msg:    data.WsMsg{},
 	}
 
@@ -22,7 +22,7 @@ func main() {
 
 	for msg := range buffer {
 		data, _ := msg.Byte()
-		fmt.Printf("%s\n", data)
+		fmt.Printf("From: %s:\nData:%s\n", coll.CollID, data)
 	}
 	// TODO:
 	// create a new websocket agent
