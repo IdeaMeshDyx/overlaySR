@@ -1,4 +1,9 @@
 .sshkey/
+<<<<<<< HEAD
 
 ./server/vendor
 ./client/vendor
+=======
+./client/vendor/
+./server/vendor/
+>>>>>>> b5059afc214b8ce4c3f82b3cb17f2f39b7a93efa

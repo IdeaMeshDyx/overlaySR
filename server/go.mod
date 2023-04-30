@@ -1,4 +1,4 @@
-module ciliumsr/server
+module overlaysr/server
 
 go 1.18
 
