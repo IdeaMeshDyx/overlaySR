@@ -1,2 +1,3 @@
 .sshkey/
-.idea/
+./client/vendor/
+./server/vendor/
