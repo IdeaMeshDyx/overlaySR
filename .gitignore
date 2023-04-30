@@ -1,1 +1,4 @@
 .sshkey/
+
+./server/vendor
+./client/vendor
