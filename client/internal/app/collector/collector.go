@@ -23,7 +23,6 @@ func (c Collector) Collect(buffer chan data.Message) {
 	// cilium API, send a pkg per second
 	for {
 		c.Msg.Pods = ciliumAPI.GetEps()
-		// c.Msg.Id = fmt.Sprintf("%d", 1)
 		buffer <- c.Msg
 		time.Sleep(1 * time.Second)
 	}
