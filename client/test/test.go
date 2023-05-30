@@ -20,6 +20,7 @@ func main() {
 	go coll.Collect(ws_buffer)
 	go hub.Read(ws_buffer)
 	// TODO : now we are using a websocket conn per message. we should optimize this more efficiently
+	// TODO2 : seperate the agent and the collector into several goroutines/threads/processes
 	for {
 		select {
 		case <-ws_buffer:

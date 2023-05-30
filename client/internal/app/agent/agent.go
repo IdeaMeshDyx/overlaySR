@@ -41,7 +41,7 @@ func (agent *WsAgent) Read(cilium chan data.Message) {
 }
 
 func (agent *WsAgent) AddrUp() {
-	agent.Addr = *flag.String("Addr", "localhost:8080", "http service Address")
+	agent.Addr = *flag.String("Addr", "10.135.103.120:8080", "http service Address")
 }
 
 func (agent *WsAgent) Send() {
