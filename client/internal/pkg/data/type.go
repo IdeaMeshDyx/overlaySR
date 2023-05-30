@@ -39,10 +39,10 @@ type serviceMsg struct{}
 type netMsg struct{}
 
 type WsMsg struct {
-	Id      string     `json:"id" :"id"`
-	Time    time.Time  `json:"time" :"time"`
-	Process procMsg    `json:"process" :"process"`
-	Pods    PodsMsg    `json:"pods" :"pods"`
+	Id      string     `json:"id"`
+	Time    time.Time  `json:"time"`
+	Process procMsg    `json:"process"`
+	Pods    PodsMsg    `json:"pods"`
 	Node    nodeMsg    `json:"node"`
 	Svc     serviceMsg `json:"svc"`
 	Net     netMsg     `json:"net"`

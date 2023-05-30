@@ -1,12 +1,14 @@
 package server
 
 import (
+	"encoding/json"
 	"flag"
-	"github.com/gorilla/websocket"
 	"html/template"
 	"log"
 	"net/http"
 	data "overlaysr/server/internal/pkg/data"
+
+	"github.com/gorilla/websocket"
 )
 
 type server interface {
@@ -57,8 +59,10 @@ func (ws *WsServer) Serving(w http.ResponseWriter, r *http.Request) {
 			log.Println("read:", err)
 			break
 		}
-		log.Printf("recv: %s", message)
-		err = c.WriteMessage(mt, message)
+		log.Printf("recv from client: %s", message)
+		reply := "ok"
+		msg, err := json.Marshal(reply)
+		err = c.WriteMessage(mt, msg)
 		if err != nil {
 			log.Println("write:", err)
 			break

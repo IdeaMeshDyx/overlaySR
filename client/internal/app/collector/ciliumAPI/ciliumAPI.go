@@ -17,10 +17,9 @@
 package ciliumAPI
 
 import (
+	"overlaysr/client/internal/pkg/data"
 	"sort"
 	"strings"
-
-	"overlaysr/client/internal/pkg/data"
 
 	"github.com/cilium/cilium/pkg/client"
 )
