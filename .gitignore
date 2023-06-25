@@ -2,3 +2,5 @@
 ./client/vendor/
 ./server/vendor/
 **/*.o
+**/.vscode/
+.idea/
