@@ -22,7 +22,7 @@ import (
 )
 
 type Server interface {
-	// Server upgrades HTTP connection for clients
+	// Server upgrades HTTP connection for a single client
 	Serving(w http.ResponseWriter, r *http.Request)
 
 	// server update chan
@@ -41,6 +41,7 @@ func (ws *WsServer) Init() {
 	ws.addr = "localhost:8080"
 	ws.message = make(chan data.Message, 100)
 	ws.upgrader = websocket.Upgrader{}
+	ws.clients = make(map[*websocket.Conn]bool)
 }
 
 func (ws *WsServer) GetAddr() string {
@@ -59,6 +60,7 @@ func (ws *WsServer) Serving(w http.ResponseWriter, r *http.Request) {
 
 	defer c.Close()
 
+	// receive message and reply
 	for {
 		mt, message, err := c.ReadMessage()
 		if err != nil {

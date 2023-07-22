@@ -23,9 +23,8 @@ func main() {
 	var hub server.WsServer
 	hub.Init()
 	fmt.Printf("Listening on %s\n", hub.GetAddr())
-	// err := http.ListenAndServe(hub.GetAddr(), nil)
 	http.HandleFunc("/ws", hub.Serving)
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(hub.GetAddr(), nil)
 	if err != nil {
 		log.Fatal(err)
 	}

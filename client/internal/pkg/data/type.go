@@ -55,5 +55,5 @@ func (ws WsMsg) Byte() ([]byte, error) {
 	if err != nil {
 		log.Fatalf("ws To Josn Failed")
 	}
-	return msg, nil
+	return msg, err
 }
