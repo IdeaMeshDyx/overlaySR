@@ -41,22 +41,22 @@ func (agent *WsAgent) Read(cilium chan data.Message) {
 }
 
 func (agent *WsAgent) AddrUp() {
-	agent.Addr = *flag.String("Addr", "10.135.103.120:8080", "http service Address")
+	// agent.Addr = *flag.String("Addr", "localhost:8080", "http service Address")
+	agent.Addr = "localhost:8080"
 }
 
 func (agent *WsAgent) Send() {
 	flag.Parse()
-	log.SetFlags(0)
 
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
 
-	u := url.URL{Scheme: "ws", Host: agent.Addr, Path: "/echo"}
+	u := url.URL{Scheme: "ws", Host: agent.Addr, Path: "/ws"}
 	log.Printf("Connecting to %s", u.String())
 
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
 	if err != nil {
-		log.Fatal("dial:", err)
+		log.Fatal("dial err: ", err)
 	}
 	defer c.Close()
 
