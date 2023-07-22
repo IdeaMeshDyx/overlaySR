@@ -3,3 +3,5 @@
 ./server/vendor/
 **/*.o
 **/*.exe
+**/.vscode/
+.idea/
