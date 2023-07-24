@@ -1,3 +1,12 @@
+/*
+package data
+
+# This file defines the Message type
+
+Author: DYX, ZJX
+
+Date: 2023/07/22
+*/
 package data
 
 import (
