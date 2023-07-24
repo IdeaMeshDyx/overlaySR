@@ -1,7 +1,18 @@
+/*
+package main
+
+This is Server's main file, its main function is:
+- Init server info
+- Listen http request for client
+
+Author: DYX, ZJX
+
+Date: 2023/07/22
+*/
 package main
 
 import (
-	"flag"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -11,8 +22,10 @@ import (
 func main() {
 	var hub server.WsServer
 	hub.Init()
-	flag.Parse()
-	log.SetFlags(0)
-	http.HandleFunc("/echo", hub.Serving)
-	log.Fatal(http.ListenAndServe(hub.GetAddr(), nil))
+	fmt.Printf("Listening on %s\n", hub.GetAddr())
+	http.HandleFunc("/ws", hub.Serving)
+	err := http.ListenAndServe(hub.GetAddr(), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
