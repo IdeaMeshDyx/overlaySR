@@ -1,15 +1,4 @@
 {
-    "client": {
-        "address": "localhost",
-        "ports": [
-            6023,
-            6029
-        ]
-    },
-    "server": {
-        "address": {
-            "ip": "127.0.0.1",
-            "port": 3099
-        },
-    }
+    "ip": "127.0.0.1",
+    "port": 3099,
 }

@@ -13,14 +13,14 @@ import (
 
 var cfgFile string
 
-// rootCmd represents the base command when called without any subcommands
+// 在 root.go 中就直接使用了 cobra 命令来初始化 rootCmd 结构，CLI 中的其他所有命令都将是 rootCmd 这个根命令的子命令。
 var rootCmd = &cobra.Command{
-	Use:   "cli",
-	Short: "basic",
-	Long:  `call simple`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+	Use:   "oversr",
+	Short: "oversr_client deployed among all the nodes ",
+	Long:  `oversr_client deployed among all the nodes , it consists of three parts: CNI Part, WS Part,Control Part`,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("overlay start to communicate with underlay")
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -32,17 +32,20 @@ func Execute() {
 	}
 }
 
+// rootCmd 根命令就会首先运行 initConfig 函数，当所有的初始化函数执行完成后，才会执行 rootCmd 的 RUN: func 执行函数
 func init() {
 	cobra.OnInitialize(initConfig)
 
+	fmt.Println("inside initConfig")
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-
+	// 全局添加的参数
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cli.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
+	// 局域添加的参数
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
@@ -52,14 +55,15 @@ func initConfig() {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
-		// Find home directory.
-		home, err := os.UserHomeDir()
+		// Find current directory.
+		home, err := os.Getwd()
 		cobra.CheckErr(err)
-
+		path := home + "/config/"
 		// Search config in home directory with name ".cli" (without extension).
-		viper.AddConfigPath(home)
+		viper.AddConfigPath(path)
+		fmt.Printf("the config is : %s", path)
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(".cli")
+		viper.SetConfigName("client")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

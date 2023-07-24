@@ -6,24 +6,31 @@ package cmd
 import (
 	"fmt"
 
+	"overlaysr/client/internal/pkg/wsclient"
+
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // wscCmd represents the wsc command
 var wscCmd = &cobra.Command{
 	Use:   "wsc",
-	Short: "fffff",
-	Long:  `ffffff`,
+	Short: "start WS Client",
+	Long:  `start ws client ,this operation will start to communicate with server`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(args[3])
+		req := wsclient.WsRequest{
+			Ip:   viper.GetString("ip"),
+			Port: viper.GetString("port"),
+		}
+		wsClient(req)
 	},
 }
 
-func wsClient(cmd *cobra.Command, args string) {
+func wsClient(req wsclient.WsRequest) {
 	// create a new websocket agent
 	// cil :=
-	fmt.Println("IP:")
-	fmt.Println("ws client start")
+	fmt.Printf("IP:%s, port: %s", req.Ip, req.Port)
+	fmt.Printf("ws client start")
 
 	//var hub agent.WsAgent
 	// msg := hub.Message
