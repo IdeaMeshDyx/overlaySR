@@ -2,7 +2,6 @@ package data
 
 import (
 	"encoding/json"
-	"log"
 	"time"
 )
 
@@ -53,7 +52,8 @@ func (ws WsMsg) Byte() ([]byte, error) {
 	ws.Time = time.Now()
 	msg, err := json.Marshal(ws)
 	if err != nil {
-		log.Fatalf("ws To Josn Failed")
+		klog.Errorf("ws To Josn Failed: %v", err)
+		return nil, err
 	}
 	return msg, err
 }

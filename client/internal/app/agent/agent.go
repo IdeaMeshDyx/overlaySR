@@ -1,7 +1,6 @@
 package agent
 
 import (
-	"log"
 	data "overlaysr/client/internal/pkg/data"
 	ws "overlaysr/client/internal/pkg/websocket"
 )
@@ -25,11 +24,12 @@ type Agent struct {
 }
 
 func (agent *Agent) ReadAndSend(cilium chan data.Message) {
+	klog.Info("Start to ReadAndSend MSG")
 	for msg := range cilium {
 		agent.Message = msg
 		msg, err := agent.Message.Byte()
 		if err != nil {
-			log.Printf("Agent Byte error: %s\n", err)
+			klog.Errorf("Agent Byte error: %s", err)
 			continue
 		}
 		go agent.WsClient.Send(msg)

@@ -1,29 +1,38 @@
 /*
-package main
-
-This is agent. Its functions are as follows:
-- Init agent and client
-- Receive message from collector
-- Send message to server through websocket client
-
-Author: DYX, ZJX
-
-Date: 2023/07/22
+Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 */
-
-package main
+package cmd
 
 import (
 	"log"
 	"os"
 	"os/signal"
-	"overlaysr/client/internal/app/agent"
-	"overlaysr/client/internal/app/collector"
-	"overlaysr/client/internal/pkg/data"
+	"overlaysr/client/internal/pkg/wsclient"
 	"time"
+
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
-func main() {
+// startCmd represents the wsc command
+var startCmd = &cobra.Command{
+	Use:   "start",
+	Short: "start WS Client",
+	Long:  `start ws client ,this operation will start to communicate with server`,
+	Run: func(cmd *cobra.Command, args []string) {
+		req := wsclient.WsRequest{
+			Ip:   viper.GetString("ip"),
+			Port: viper.GetString("port"),
+		}
+		if req.Ip == "" || req.Port == "" {
+			klog.Error("get IP:Port failed")
+		}
+		klog.Infof("start WS Client at %v:%v", req.Ip, req.Port)
+		startWS(req)
+	},
+}
+
+func startWS(req wsclient.WsRequest) {
 	// instantiate a collector and a websocket agent
 	ws_buffer := make(chan data.Message, 10)
 	defer close(ws_buffer)
@@ -66,5 +75,9 @@ func main() {
 			return
 		}
 	}
+}
+
+func init() {
+	rootCmd.AddCommand(wscCmd)
 
 }

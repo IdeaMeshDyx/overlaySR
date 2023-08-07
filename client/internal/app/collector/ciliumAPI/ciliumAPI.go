@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+//go:build go1.14
 // +build go1.14
 
 package ciliumAPI
@@ -30,13 +31,15 @@ func GetEps() data.PodsMsg {
 	msg := data.PodsMsg{}
 	c, err := client.NewDefaultClient()
 	if err != nil {
-		panic(err)
+		klog.Errorf("Create Cilium Client failed: %v", err)
+		return nil
 	}
 
 	// List all endpoints
 	eps, err := c.EndpointList()
 	if err != nil {
-		panic(err)
+		klog.Errorf("Create Cilium Client failed: %v", err)
+		return nil
 	}
 
 	// Sort EPs per IDs

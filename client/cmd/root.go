@@ -35,17 +35,8 @@ func Execute() {
 // rootCmd 根命令就会首先运行 initConfig 函数，当所有的初始化函数执行完成后，才会执行 rootCmd 的 RUN: func 执行函数
 func init() {
 	cobra.OnInitialize(initConfig)
-
-	fmt.Println("inside initConfig")
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-	// 全局添加的参数
+	klog.Info("inside initConfig")
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cli.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	// 局域添加的参数
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
@@ -64,12 +55,13 @@ func initConfig() {
 		fmt.Printf("the config is : %s", path)
 		viper.SetConfigType("yaml")
 		viper.SetConfigName("client")
+		klog.Info("initConfig Success")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+		klog.Errorf("Using config file: %v", viper.ConfigFileUsed())
 	}
 }

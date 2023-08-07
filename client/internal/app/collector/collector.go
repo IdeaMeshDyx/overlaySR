@@ -17,7 +17,7 @@ type CollMsg interface {
 }
 
 func (c Collector) Collect(buffer chan data.Message) {
-
+	klog.Infof("Start to Collect Info from Cilium")
 	// cilium API, send a pkg per second
 	for {
 		// c.Msg.Pods = ciliumAPI.GetEps()
